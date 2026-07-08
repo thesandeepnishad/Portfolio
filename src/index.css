@@ -1695,3 +1695,43 @@ section {
     transform: translateY(70px);
   }
 }
+
+/* ============================
+   MOBILE PERFORMANCE OVERRIDES
+   Large blur() filters + infinite animations are the main
+   cause of scroll jank on mobile GPUs, so scale them down.
+   ============================ */
+@media screen and (max-width: 768px) {
+  .gradient-sphere,
+  .about-gradient-sphere,
+  .skills-gradient-sphere,
+  .projects-gradient-sphere,
+  .testimonial-gradient-sphere,
+  .exp-gradient-sphere {
+    width: 240px;
+    height: 240px;
+    filter: blur(70px);
+    opacity: 0.85;
+    animation: none !important;
+  }
+
+  /* Animated box-shadow forces a repaint every frame */
+  .footer-frame {
+    animation: none;
+    box-shadow:
+      0 0 28px color-mix(in srgb, var(--c-glow1) 22%, transparent),
+      inset 0 0 60px color-mix(in srgb, var(--c-glow1) 4%, transparent);
+  }
+
+  .circuit-trace-fwd,
+  .circuit-trace-rev {
+    animation: none;
+  }
+
+  .footer-center-glow,
+  .footer-bottom-bloom,
+  .footer-bottom-glow-line,
+  .footer-top-line {
+    animation: none;
+  }
+}

@@ -10,6 +10,7 @@ import { bentoSocialLinks } from '../constants'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import useInView, { isMobile, isTouchDevice } from '../useInView'
 gsap.registerPlugin(ScrollTrigger)
 
 const BouncingAlien = () => {
@@ -30,6 +31,7 @@ const BouncingAlien = () => {
 }
 
 const About = () => {
+    const [canvasRef, canvasInView] = useInView()
 
     useGSAP(() => {
         gsap.from("#card", {
@@ -82,9 +84,15 @@ const About = () => {
                     </div>
                     {/* <CuteRobot /> */}
                     <div className="md:col-span-5 col-span-12 row-span-5">
-                        <div className="about-model-bg hover:cursor-grab rounded-2xl md:h-full h-60 w-full">
-                            <Canvas className='w-full h-full'>
-                                <OrbitControls enableZoom={false} />
+                        <div ref={canvasRef} className="about-model-bg hover:cursor-grab rounded-2xl md:h-full h-60 w-full">
+                            <Canvas
+                                className='w-full h-full'
+                                dpr={[1, isMobile ? 1.5 : 2]}
+                                frameloop={canvasInView ? 'always' : 'never'}
+                                gl={{ antialias: !isMobile, powerPreference: 'high-performance' }}
+                            >
+                                {/* OrbitControls hijacks one-finger touch drags and blocks page scroll on mobile */}
+                                {!isTouchDevice && <OrbitControls enableZoom={false} enablePan={false} />}
                                 {/* <CuteRobot scale={2} position={[0, -3, 0]} rotation={[0, 5, 0]} /> */}
                                 <BouncingAlien />
                             </Canvas>

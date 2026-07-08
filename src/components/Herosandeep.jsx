@@ -17,6 +17,7 @@ export function Herosandeep(props) {
   const { nodes, materials } = useGraph(clone)
 
   const group = useRef();
+  const bones = useRef(null);
   const mouse = useRef({ x: 0, y: 0 });
   const introOffset = useRef({ y: 2 });
   const headTarget  = useRef({ x: 0, y: 0 });
@@ -58,12 +59,17 @@ export function Herosandeep(props) {
     hipsTarget.current.x  += (targetX * 0.1  - hipsTarget.current.x)  * hipsLerp;
     hipsTarget.current.y  += (-targetY * 0.1  - hipsTarget.current.y)  * hipsLerp;
 
-    const head   = group.current.getObjectByName('Head');
-    const neck   = group.current.getObjectByName('Neck');
-    const spine2 = group.current.getObjectByName('Spine2');
-    const spine1 = group.current.getObjectByName('Spine1');
-    const spine  = group.current.getObjectByName('Spine');
-    const hips   = group.current.getObjectByName('Hips');
+    if (!bones.current) {
+      bones.current = {
+        head:   group.current.getObjectByName('Head'),
+        neck:   group.current.getObjectByName('Neck'),
+        spine2: group.current.getObjectByName('Spine2'),
+        spine1: group.current.getObjectByName('Spine1'),
+        spine:  group.current.getObjectByName('Spine'),
+        hips:   group.current.getObjectByName('Hips'),
+      };
+    }
+    const { head, neck, spine2, spine1, spine, hips } = bones.current;
 
     const iY = introOffset.current.y;
 
